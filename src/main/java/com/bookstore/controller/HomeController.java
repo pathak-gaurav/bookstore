@@ -10,4 +10,9 @@ public class HomeController {
     public String showHomePage() {
         return "index";
     }
+
+    @RequestMapping("/account")
+    public String myAccount() {
+        return "myAccount";
+    }
 }
