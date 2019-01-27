@@ -21,12 +21,12 @@ public class PasswordResetToken {
     @JoinColumn(nullable = false, name = "USER_ID")
     private User user;
 
-    private Date expirtDate;
+    private Date expiryDate;
 
     public PasswordResetToken(final String token, final User user) {
         this.token = token;
         this.user = user;
-        this.expirtDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
     private Date calculateExpiryDate(final int expiryTimeInMinutes) {
@@ -38,7 +38,7 @@ public class PasswordResetToken {
 
     public void updateToken(final String token) {
         this.token = token;
-        this.expirtDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
     public static int getEXPIRATION() {
@@ -69,12 +69,12 @@ public class PasswordResetToken {
         this.user = user;
     }
 
-    public Date getExpirtDate() {
-        return expirtDate;
+    public Date getExpiryDate() {
+        return expiryDate;
     }
 
-    public void setExpirtDate(Date expirtDate) {
-        this.expirtDate = expirtDate;
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class PasswordResetToken {
                 "passwordResetTokenId=" + passwordResetTokenId +
                 ", token='" + token + '\'' +
                 ", user=" + user +
-                ", expirtDate=" + expirtDate +
+                ", expiryDate=" + expiryDate +
                 '}';
     }
 }
