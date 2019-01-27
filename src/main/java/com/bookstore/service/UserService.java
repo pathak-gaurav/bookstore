@@ -2,11 +2,19 @@ package com.bookstore.service;
 
 import com.bookstore.model.User;
 import com.bookstore.security.PasswordResetToken;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.bookstore.security.UserRole;
 
-public interface UserService  {
+import java.util.Set;
+
+public interface UserService {
+
+    User findByUsername(String username);
+
+    User findByEmail(String email);
 
     PasswordResetToken getPasswordResetToken(final String token);
 
-    void createPasswordResetTokenForUser(final User user,final String token);
+    void createPasswordResetTokenForUser(final User user, final String token);
+
+    User createUser(User user, Set<UserRole> userRoleSet);
 }
