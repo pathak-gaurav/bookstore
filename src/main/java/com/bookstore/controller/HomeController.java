@@ -6,8 +6,11 @@ import com.bookstore.security.Role;
 import com.bookstore.security.UserRole;
 import com.bookstore.service.UserSecurityService;
 import com.bookstore.service.UserService;
+import com.bookstore.utility.MailConstructor;
 import com.bookstore.utility.SecurityUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,9 +26,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 
 @Controller
 public class HomeController {
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private MailConstructor mailConstructor;
 
     @Autowired
     private UserSecurityService userSecurityService;
@@ -83,12 +93,19 @@ public class HomeController {
         role.setRoleId(1L);
         role.setRoleName("USER_ROLE");
         Set<UserRole> userRoleSet = new HashSet<>();
-        userRoleSet.add(new UserRole(user,role));
+        userRoleSet.add(new UserRole(user, role));
 
-        //TO DO FROM HERE
         userService.createUser(user, userRoleSet);
 
-        return null;
+        String token = UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(user, token);
+
+        String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        SimpleMailMessage simpleMailMessage = mailConstructor.constructResetTokenEmail(appUrl, request.getLocale(), token, user, randomPassword);
+
+        mailSender.send(simpleMailMessage);
+        model.addAttribute("emailSent", true);
+        return "myAccount";
 
     }
 

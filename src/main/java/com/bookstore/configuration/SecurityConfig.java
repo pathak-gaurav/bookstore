@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/js/**",
             "/index",
             "/forgetPassword",
+            "/h2_console/**",
             "/newUser",
             "/login",
             "/"
@@ -60,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     //defaultSuccessUrl() – the landing page after a successful login
               .defaultSuccessUrl("/")
               .loginPage("/login").permitAll()
+              .and()
+              .headers().frameOptions().disable()
               .and()
 
               /* Matcher which compares a pre-defined ant-style pattern against the URL ( servletPath + pathInfo) of an

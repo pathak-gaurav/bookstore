@@ -16,5 +16,5 @@ public interface UserService {
 
     void createPasswordResetTokenForUser(final User user, final String token);
 
-    User createUser(User user, Set<UserRole> userRoleSet);
+    User createUser(User user, Set<UserRole> userRoleSet) throws Exception;
 }
